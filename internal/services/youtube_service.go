@@ -20,6 +20,8 @@ func FetchChannel(handle string) (*models.Channel, error) {
 		return nil, fmt.Errorf("YOUTUBE_API_KEY is not set")
 	}
 
+	// Makes a single request to fetch both the channel name and profile picture,
+	// reducing unnecessary API calls and improving performance.
 	url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/channels?part=snippet&fields=items/snippet/title,items/snippet/thumbnails/default&key=%s&forHandle=%s", apiKey, handle)
 
 	resp, err := http.Get(url)
