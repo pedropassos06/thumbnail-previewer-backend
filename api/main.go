@@ -32,9 +32,9 @@ func main() {
 	fmt.Println("Starting server...")
 
 	// Get port from env
-	port := os.Getenv("SERVER_PORT")
+	port := os.Getenv("PORT")
 	if port == "" {
-		log.Fatalf("PORT not set in .env file")
+		port = "8080"
 	}
 
 	log.Printf("Starting server on port %s", port)
