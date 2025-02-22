@@ -12,20 +12,24 @@ import (
 	"github.com/pedropassos06/thumbnail-previewer-backend/internal/router"
 )
 
+var (
+	cache *lru.Cache
+	r     *chi.Mux
+)
+
 func init() {
 	config.LoadEnv()
 
+	// Initialize LRU cache
+	cache = lru.New(1000)
+
+	// Initialize router with cache
+	r = chi.NewRouter()
+	router.InitRoutes(r, cache)
 }
 
 func main() {
 	fmt.Println("Starting server...")
-
-	// Initialize LRU cache
-	cache := lru.New(1000)
-
-	// Initialize router with cache
-	r := chi.NewRouter()
-	router.InitRoutes(r, cache)
 
 	// Get port from env
 	port := os.Getenv("SERVER_PORT")
@@ -35,4 +39,9 @@ func main() {
 
 	log.Printf("Starting server on port %s", port)
 	http.ListenAndServe(":"+port, r)
+}
+
+// Handler is the entry point for Vercel requests
+func Handler(w http.ResponseWriter, req *http.Request) {
+	r.ServeHTTP(w, req)
 }

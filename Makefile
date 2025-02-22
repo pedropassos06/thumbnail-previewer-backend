@@ -8,7 +8,7 @@ build:
 	@go build -o $(APP_NAME)
 
 run:
-	@go run cmd/main.go
+	@go run api/main.go
 
 clean:
 	@rm -f $(APP_NAME)
