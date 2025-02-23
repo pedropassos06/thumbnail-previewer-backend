@@ -12,7 +12,7 @@ import (
 
 func router(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	switch req.Path {
-	case "ping":
+	case "/ping":
 		return handlers.PingHandler(ctx, req)
 	case "/channel":
 		return handlers.GetChannelHandler(ctx, req)
