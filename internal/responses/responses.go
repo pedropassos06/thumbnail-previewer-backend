@@ -12,7 +12,9 @@ func SendError(statusCode int, message string) (events.APIGatewayProxyResponse, 
 	return events.APIGatewayProxyResponse{
 		StatusCode: statusCode,
 		Headers: map[string]string{
-			"Content-Type": "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+			"Access-Control-Allow-Headers": "Content-Type, Authorization",
 		},
 		Body: string(body),
 	}, nil
@@ -23,7 +25,9 @@ func SendSuccess(data interface{}) (events.APIGatewayProxyResponse, error) {
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers: map[string]string{
-			"Content-Type": "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+			"Access-Control-Allow-Headers": "Content-Type, Authorization",
 		},
 		Body: string(body),
 	}, nil
