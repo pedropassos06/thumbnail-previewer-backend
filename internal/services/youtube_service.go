@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/golang/groupcache/lru"
 	"github.com/pedropassos06/thumbnail-previewer-backend/internal/models"
 	"github.com/pedropassos06/thumbnail-previewer-backend/internal/responses"
 )
@@ -15,12 +14,7 @@ type YoutubeAPIConsumer interface {
 	FetchChannel(handle string) (*models.Channel, error)
 }
 
-func FetchChannel(handle string, cache *lru.Cache) (*models.Channel, error) {
-	if handle, ok := cache.Get(handle); ok {
-		fmt.Println("Cache hit")
-		return handle.(*models.Channel), nil
-	}
-
+func FetchChannel(handle string) (*models.Channel, error) {
 	apiKey := os.Getenv("YOUTUBE_API_KEY")
 	if apiKey == "" {
 		return nil, fmt.Errorf("YOUTUBE_API_KEY is not set")
@@ -53,9 +47,6 @@ func FetchChannel(handle string, cache *lru.Cache) (*models.Channel, error) {
 		result.Items[0].Snippet.Title,
 		result.Items[0].Snippet.Thumbnails.Default.URL,
 	)
-
-	// store in cache
-	cache.Add(handle, channel)
 
 	return channel, nil
 }

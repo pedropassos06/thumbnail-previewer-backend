@@ -1,47 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	"context"
 	"net/http"
-	"os"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/golang/groupcache/lru"
-	"github.com/pedropassos06/thumbnail-previewer-backend/internal/config"
-	"github.com/pedropassos06/thumbnail-previewer-backend/internal/router"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/pedropassos06/thumbnail-previewer-backend/internal/handlers"
+	"github.com/pedropassos06/thumbnail-previewer-backend/internal/responses"
 )
 
-var (
-	cache *lru.Cache
-	r     *chi.Mux
-)
-
-func init() {
-	config.LoadEnv()
-
-	// Initialize LRU cache
-	cache = lru.New(1000)
-
-	// Initialize router with cache
-	r = chi.NewRouter()
-	router.InitRoutes(r, cache)
+func router(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	switch req.Path {
+	case "ping":
+		return handlers.PingHandler(ctx, req)
+	case "/channel":
+		return handlers.GetChannelHandler(ctx, req)
+	default:
+		return responses.SendError(http.StatusNotFound, "Not Found")
+	}
 }
 
 func main() {
-	fmt.Println("Starting server...")
-
-	// Get port from env
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	log.Printf("Starting server on port %s", port)
-	http.ListenAndServe(":"+port, r)
-}
-
-// Handler is the entry point for Vercel requests
-func Handler(w http.ResponseWriter, req *http.Request) {
-	r.ServeHTTP(w, req)
+	lambda.Start(router)
 }
