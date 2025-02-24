@@ -1,0 +1,18 @@
+Resources:
+  GetThumbnailPreviewFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main
+      Runtime: go1.x
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          YOUTUBE_API_KEY: !Ref "${YOUTUBE_API_KEY}"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: GET

@@ -10,6 +10,9 @@ build:
 	@zip bin/thumbnail_previewer_backend.zip bootstrap
 	@rm bootstrap
 
+build-internal:
+	@GOOS=linux GOARCH=amd64 go build -o main api/main.go
+
 run:
 	@go run api/main.go
 
