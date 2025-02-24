@@ -26,3 +26,4 @@ go.work.sum
 .vercel
 /bin
 env.json
+main
