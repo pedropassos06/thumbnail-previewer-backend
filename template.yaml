@@ -2,7 +2,7 @@ Resources:
   GetThumbnailPreviewFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: main
+      Handler: bin/thumbnail_previewer_backend
       Runtime: go1.x
       CodeUri: .
       MemorySize: 128
