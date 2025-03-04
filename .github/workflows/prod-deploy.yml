@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lambda.zip
-          path: bin/thumbnail-previewer-backend.zip
+          path: bin/thumbnail_previewer_backend.zip
 
 
   deploy:
