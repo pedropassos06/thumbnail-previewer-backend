@@ -11,7 +11,7 @@ build:
 	@mv bootstrap bin/$(APP_NAME)
 
 run:
-	@go run api/main.go
+	@sam local start-api --env-vars env.json
 
 clean:
 	@rm -rf bin/
