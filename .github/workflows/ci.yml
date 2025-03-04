@@ -24,6 +24,9 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
 
+    - name: Copy .env file
+      run: cp .env .env
+
     - name: Build the application
       run: go build -v api/main.go
 
