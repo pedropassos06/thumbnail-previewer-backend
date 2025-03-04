@@ -2,9 +2,14 @@ package services
 
 import (
 	"testing"
+
+	"github.com/pedropassos06/thumbnail-previewer-backend/internal/config"
 )
 
 func TestFetchChannel(t *testing.T) {
+	// Load environment variables
+	config.LoadEnv()
+
 	// Define expected output
 	expectedName := "Pedro Passos"
 	expectedProfilePic := "https://yt3.ggpht.com/LfQxT63Q6ndKEzMysi3cemjdoiY8vep3L9b6O5M56ZKJtkyhZRpkFo-0pQggb5c06cdoWclp5A=s88-c-k-c0x00ffffff-no-rj"
