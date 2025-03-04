@@ -22,18 +22,31 @@ jobs:
         run: go mod tidy
 
       - name: Build the application
-        run: go build -v api/main.go
+        run: make build
 
       - name: Run unit tests
         run: go test -v ./...
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: lambda.zip
+          path: bin/thumbnail-previewer-backend.zip
+
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: lambda.zip
+          path: bin/
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
@@ -42,13 +55,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Zip Lambda function
-        run: |
-          make build
-          zip -r lambda.zip bin/thumbnail_previewer_backend
-
       - name: Deploy to Lambda
         run: |
           aws lambda update-function-code \
             --function-name thumbnail-previewer-backend \
-            --zip-file fileb://lambda.zip
+            --zip-file fileb://bin/thumbnail-previewer-backend.zip
